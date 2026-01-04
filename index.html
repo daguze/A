@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🎉 Tap to Continue</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+  text-align: center;
+  padding-top: 20%;
+}
+button {
+  padding: 18px 30px;
+  font-size: 20px;
+  cursor: pointer;
+}
+#controls {
+  display: none;
+  margin-top: 30px;
+}
+#warning {
+  color: red;
+  margin-top: 20px;
+  font-size: 20px;
+}
+</style>
+
+<script>
+let audio;
+
+function startPrank() {
+  audio = new Audio("hbd.mp3"); // Replace with your audio file path
+  audio.loop = true;
+  audio.volume = 1.0;
+  audio.play();
+
+  document.getElementById("start").style.display = "none";
+  document.getElementById("controls").style.display = "block";
+
+  // Open extra tabs after sound starts
+  for (let i = 0; i < 3; i++) {
+    setTimeout(() => {
+      window.open(window.location.href, "_blank");
+    }, i * 1000);
+  }
+}
+
+// Fake mute
+function fakeMute() {
+  document.getElementById("warning").innerText =
+    "Muted ✔️";
+  audio.volume = 1.0;
+}
+
+// Fake close
+function fakeClose() {
+  document.getElementById("warning").innerText =
+    "Closing…";
+  for (let i = 0; i < 2; i++) {
+    window.open(window.location.href, "_blank");
+  }
+}
+
+// Resume audio if paused
+document.addEventListener("visibilitychange", () => {
+  if (audio && audio.paused) {
+    audio.play();
+  }
+});
+</script>
+</head>
+
+<body>
+
+<h1>🎂 Happy Birthday 🎂</h1>
+<p>Tap the button below 👇</p>
+
+<button id="start" onclick="startPrank()">▶ Start</button>
+
+<div id="controls">
+  <button onclick="fakeMute()">🔇 Mute</button>
+  <button onclick="fakeClose()">❌ Close</button>
+  <div id="warning"></div>
+</div>
+
+</body>
+</html>
