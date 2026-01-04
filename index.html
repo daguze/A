@@ -30,7 +30,7 @@
 <button id="start">▶ Start</button>
 
 <div id="controls">
-  <button onclick="fakeClose()>⏸ Pause</button>
+  <button onclick="fakeClose()">⏸ Pause</button>
   <button onclick="fakeMute()">🔇 Mute</button>
 </div>
 
@@ -41,8 +41,7 @@ let audio;
 
 const startBtn = document.getElementById("start");
 const controls = document.getElementById("controls");
-const pauseBtn = document.getElementById("pause");
-const muteBtn = document.getElementById("mute");
+
 const statusEl = document.getElementById("status");
 
 startBtn.addEventListener("click", async () => {
@@ -84,4 +83,5 @@ muteBtn.addEventListener("click", () => {
 
 </body>
 </html>
+
 
