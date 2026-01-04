@@ -1,90 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>🎉 Tap to Continue</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🎂 Happy Birthday</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #111;
-  color: white;
-  text-align: center;
-  padding-top: 20%;
-}
-button {
-  padding: 18px 30px;
-  font-size: 20px;
-  cursor: pointer;
-}
-#controls {
-  display: none;
-  margin-top: 30px;
-}
-#warning {
-  color: red;
-  margin-top: 20px;
-  font-size: 20px;
-}
+  body{
+    font-family: Arial, sans-serif;
+    background:#111; color:#fff;
+    text-align:center;
+    padding: 18vh 16px 40px;
+  }
+  button{
+    padding:18px 28px;
+    font-size:20px;
+    cursor:pointer;
+    border:0;
+    border-radius:12px;
+  }
+  #controls{ display:none; margin-top:18px; }
+  #status{ margin-top:14px; font-size:16px; opacity:.9; }
 </style>
+</head>
+<body>
+
+<h1>🎂 Happy Birthday 🎂</h1>
+<p>Tap Start to play music 🎶</p>
+
+<button id="start">▶ Start</button>
+
+<div id="controls">
+  <button id="pause">⏸ Pause</button>
+  <button id="mute">🔇 Mute</button>
+</div>
+
+<div id="status"></div>
 
 <script>
 let audio;
 
-function startPrank() {
-  audio = new Audio("hbd.mp3"); // Replace with your audio file path
+const startBtn = document.getElementById("start");
+const controls = document.getElementById("controls");
+const pauseBtn = document.getElementById("pause");
+const muteBtn = document.getElementById("mute");
+const statusEl = document.getElementById("status");
+
+startBtn.addEventListener("click", async () => {
+  // IMPORTANT: MP3 must be in the same folder as index.html
+  audio = new Audio("./hbd.mp3");
   audio.loop = true;
-  audio.volume = 1.0;
-  audio.play();
+  audio.preload = "auto";
 
-  document.getElementById("start").style.display = "none";
-  document.getElementById("controls").style.display = "block";
-
-  // Open extra tabs after sound starts
-  for (let i = 0; i < 3; i++) {
-    setTimeout(() => {
-      window.open(window.location.href, "_blank");
-    }, i * 1000);
-  }
-}
-
-// Fake mute
-function fakeMute() {
-  document.getElementById("warning").innerText =
-    "Muted ✔️";
-  audio.volume = 1.0;
-}
-
-// Fake close
-function fakeClose() {
-  document.getElementById("warning").innerText =
-    "Closing…";
-  for (let i = 0; i < 2; i++) {
-    window.open(window.location.href, "_blank");
-  }
-}
-
-// Resume audio if paused
-document.addEventListener("visibilitychange", () => {
-  if (audio && audio.paused) {
-    audio.play();
+  try {
+    await audio.play(); // mobile browsers allow this only after a tap
+    statusEl.textContent = "Playing ✅";
+    startBtn.style.display = "none";
+    controls.style.display = "block";
+  } catch (err) {
+    statusEl.textContent = "Could not play. Check MP3 path/format.";
+    console.log(err);
   }
 });
+
+pauseBtn.addEventListener("click", () => {
+  if (!audio) return;
+  if (audio.paused) {
+    audio.play();
+    pauseBtn.textContent = "⏸ Pause";
+    statusEl.textContent = "Playing ✅";
+  } else {
+    audio.pause();
+    pauseBtn.textContent = "▶ Resume";
+    statusEl.textContent = "Paused ⏸";
+  }
+});
+
+muteBtn.addEventListener("click", () => {
+  if (!audio) return;
+  audio.muted = !audio.muted;
+  muteBtn.textContent = audio.muted ? "🔊 Unmute" : "🔇 Mute";
+});
 </script>
-</head>
-
-<body>
-
-<h1>🎂 Happy Birthday 🎂</h1>
-<p>Tap the button below 👇</p>
-
-<button id="start" onclick="startPrank()">▶ Start</button>
-
-<div id="controls">
-  <button onclick="fakeMute()">🔇 Mute</button>
-  <button onclick="fakeClose()">❌ Close</button>
-  <div id="warning"></div>
-</div>
 
 </body>
 </html>
